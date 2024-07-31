@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

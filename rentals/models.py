@@ -2,6 +2,12 @@
 from django.db.models import JSONField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from rest_framework.pagination import PageNumberPagination
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 2  # Set the default page size
+    page_size_query_param = 'page_size'  # Allow clients to set page size
+    max_page_size = 10  # Set maximum page size
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -27,6 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     # Optional fields
+    username = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
@@ -38,12 +45,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username', 'name']
 
     objects = UserManager()
 
     def __str__(self):
-        return f'{self.name} - {self.email} - {self.phone_number} - {self.role}'
+        return f'{self.username} - {self.name} - {self.email} - {self.phone_number} - {self.role}'
 
 
 #Venue model
