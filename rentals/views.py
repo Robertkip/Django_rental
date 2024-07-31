@@ -20,7 +20,8 @@ def register_user(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)@api_view(['POST'])
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['POST'])
 def user_login(request):
     username = request.data.get('username')
@@ -32,7 +33,7 @@ def user_login(request):
     user = None
     if '@' in username:
         try:
-            user = User.objects.get(email=username)
+            user = UserSerializer.objects.get(email=username)
         except User.DoesNotExist:
             pass
 
@@ -40,10 +41,12 @@ def user_login(request):
         user = authenticate(username=username, password=password)
 
     if user:
-        token, created = Token.objects.get_or_create(user=user)
+        token, _ = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
 
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
     if request.method == 'POST':
