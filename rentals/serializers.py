@@ -5,7 +5,7 @@ from .models import User, Venue, Event, Ticket, Transaction, AccessControl, Even
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'name', 'email', 'password', 'phone_number', 'role', 'created_at', 'updated_at']
+        fields = ['id', 'username', 'name', 'email', 'password', 'phone_number', 'role', 'created_at', 'updated_at']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

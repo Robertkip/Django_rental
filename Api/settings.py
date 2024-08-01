@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rentals',
+    'authentication',
 ]
 
 AUTH_USER_MODEL = 'rentals.User'

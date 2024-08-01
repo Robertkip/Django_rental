@@ -31,20 +31,20 @@ def user_login(request):
         return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     user = None
-    if '@' in username:
-        try:
-            user = UserSerializer.objects.get(email=username)
-        except User.DoesNotExist:
-            pass
-
-    if not user:
+    try:
+        if '@' in username:
+            # Assuming the username is an email address
+            user = User.objects.get(username=username)
+            print(user)
+            # raise ValueError("Invalid username format")
+        user = UserSerializer.fields.__get__(username=username)
+    except User.DoesNotExist:
         user = authenticate(username=username, password=password)
-
     if user:
         token, _ = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
-
-    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

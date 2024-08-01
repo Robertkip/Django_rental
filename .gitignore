@@ -1,2 +1,2 @@
-.env
-pdj
+pdj/
+db.sqlite3
