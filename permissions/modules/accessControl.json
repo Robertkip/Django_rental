@@ -1,0 +1,21 @@
+{
+    "main": "auth",
+    "roles": [
+        "member","Admin","Organizer"
+    ],
+    "children": {
+        "sign_up": {
+            "main": "signup",
+            "roles": ["member"]
+        },
+        "login": {
+            "main": "login",
+            "roles": ["member"]
+        },
+        "update_budget_field": {
+            "main": "logout",
+            "roles": ["member"]
+        }
+    }
+
+}

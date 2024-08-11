@@ -1,4 +1,6 @@
 # rentals/views.py
+import os
+import json
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
@@ -631,3 +633,35 @@ def activitylogs_detail(request, pk):
         activitylog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+
+@api_view(['GET'])
+def read_json(request):
+    if request.method == 'GET':
+        # Specify the directory containing your JSON files
+        json_dir = os.path.join(os.getcwd(), 'permissions', 'modules')
+
+        # List all JSON files in the directory and remove the .json extension
+        json_files = [os.path.splitext(f)[0] for f in os.listdir(json_dir) if f.endswith('.json')]
+        
+        # Return the list of JSON filenames without the extension in the response
+        return Response({"modules": json_files})
+    
+@api_view(['GET'])
+def single_json(request, module):
+    if request.method == 'GET':
+        # Specify the directory containing your JSON files
+        json_dir = os.path.join(os.getcwd(), 'permissions', 'modules')
+        
+        # Build the full path to the JSON file with the provided module name
+        json_path = os.path.join(json_dir, f"{module}.json")
+        
+        # Check if the file exists
+        if os.path.exists(json_path):
+            # Read the JSON file
+            with open(json_path, 'r') as json_file:
+                json_content = json.load(json_file)
+            
+            # Return the JSON content in the response
+            return Response(json_content, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)

@@ -7,8 +7,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'name', 'email', 'password', 'phone_number', 'role', 'created_at', 'updated_at']
         extra_kwargs = {'password': {'write_only': True}}
+def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Username already exists")
+        return value
 
-    def create(self, validated_data):
+def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already exists")
+        return value
+def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -16,15 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Username already exists")
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email already exists")
-        return value
+   
     
 
 class VenueSerializer(serializers.ModelSerializer):
