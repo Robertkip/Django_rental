@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination
-from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination, Department
+from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer, DepartmentSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from .permissions import IsAdmin, IsOrganizer, IsAttendee, IsAdminOrOrganizer, IsOwnerOnly
 
@@ -511,3 +511,42 @@ def eventorganizer_detail(request, pk):
     # queryset = Billing.objects.all()
     # serializer_class = BillingRecordsSerializer
 #     pagination_class = LargeResultsSetPagination
+
+
+#Departments
+@api_view(['GET', 'POST'])
+def department_list(request):
+    if request.method == 'GET':
+        departments = Department.objects.all()
+        serializer = DepartmentSerializer(departments, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = DepartmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'PUT', 'DELETE'])
+def department_detail(request, pk):
+    try:
+        department = Department.objects.get(pk=pk)
+    except Department.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = DepartmentSerializer(department)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = DepartmentSerializer(department, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        department.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    

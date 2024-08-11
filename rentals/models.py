@@ -240,3 +240,16 @@ class EventOrganizer(models.Model):
 
     def __str__(self):
         return f'{self.user_id.name} - {self.role}'
+
+
+class Department(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.name
+    
