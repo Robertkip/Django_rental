@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import user_logout, user_list, user_detail, venue_list, venue_detail, event_list, event_detail, ticket_list, ticket_detail, transaction_list, transaction_detail, accesscontrol_list, accesscontrol_detail, eventfeedback_list, eventfeedback_detail, report_list, report_detail, discount_list, discount_detail, eventorganizer_list, eventorganizer_detail, department_list, department_detail
+from .views import user_logout, user_list, user_detail, venue_list, venue_detail, event_list, event_detail, ticket_list, ticket_detail, transaction_list, transaction_detail, accesscontrol_list, accesscontrol_detail, eventfeedback_list, eventfeedback_detail, report_list, report_detail, discount_list, discount_detail, eventorganizer_list, eventorganizer_detail, department_list, department_detail, country_list, country_detail, activitylogs_list, activitylogs_detail
+
+
 
 urlpatterns = [
     path('logout/', user_logout, name='logout'),
@@ -25,4 +27,9 @@ urlpatterns = [
     path('eventorganizer/<int:pk>/', eventorganizer_detail, name='eventorganizer-detail'),
     path('department/', department_list, name='department-list'),
     path('department/<int:pk>/', department_detail, name='department-detail'),
+    path('country/', country_list, name='country-list'),
+    path('country/<int:pk>/', country_detail, name='country-detail'),
+    path('activitylog/', activitylogs_list, name='activitylogs-list'),
+    path('activitylog/<int:pk>/', activitylogs_detail, name='activitylogs-detail'),
+    
 ]

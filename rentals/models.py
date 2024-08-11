@@ -43,6 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)  # Adjust max_length as needed
     role = models.CharField(max_length=10, choices=role_choices, default='Attendee')
     
@@ -64,10 +65,12 @@ class Venue(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
+    contact_name = models.CharField(max_length=100)
+    contact_phone = models.CharField(max_length=15, blank=True, null=True)
     capacity = models.IntegerField()
-    facilities = models.TextField()
+    facilities = models.TextField(null=True, blank=True)
     charge_rate = models.DecimalField(max_digits=10, decimal_places=2)
-    contact_info = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -78,6 +81,7 @@ class Venue(models.Model):
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
@@ -93,6 +97,7 @@ class Event(models.Model):
 class Ticket(models.Model):
     id = models.AutoField(primary_key=True)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    state = models.CharField(max_length=100, null=True, blank=True)
     ticket_type = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity_available = models.IntegerField()
@@ -120,6 +125,7 @@ class Transaction(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)# Ensure 'Ticket' is imported or defined
     transaction_date = models.DateTimeField()
+    state = models.CharField(max_length=100, null=True, blank=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
@@ -140,6 +146,7 @@ class AccessControl(models.Model):
     id = models.AutoField(primary_key=True)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.CharField(max_length=100, null=True, blank=True)
     access_level = models.CharField(max_length=50, choices=Access_choices)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -153,6 +160,7 @@ class EventFeedback(models.Model):
     id = models.AutoField(primary_key=True)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.CharField(max_length=100, null=True, blank=True)
     rating = models.PositiveIntegerField(choices=[(i, str(i)) for i in range(1, 6)])  # Ratings from 1 to 5
     comments = models.TextField(blank=True)  # Optional comments field
     created_at = models.DateTimeField(auto_now_add=True)
@@ -171,6 +179,7 @@ class Notification(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
+    state = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='unread')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -191,6 +200,7 @@ class Report(models.Model):
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     report_type = models.CharField(max_length=50, choices=REPORT_TYPE_CHOICES)
     data = JSONField()  # Use JSONField to store detailed report data
+    state = models.CharField(max_length=100, null=True, blank=True)
     generated_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -212,6 +222,7 @@ class Report(models.Model):
 class Discount(models.Model):
     id = models.AutoField(primary_key=True)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    state = models.CharField(max_length=100, null=True, blank=True)
     code = models.CharField(max_length=50, unique=True)
     description = models.TextField()
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
@@ -235,6 +246,7 @@ class EventOrganizer(models.Model):
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=role_choices)
+    state = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -245,6 +257,7 @@ class EventOrganizer(models.Model):
 class Department(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -253,3 +266,24 @@ class Department(models.Model):
     def __str__(self):
         return self.name
     
+class Country(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    descrption = models.TextField()
+    state = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name}, {self.descrption}, {self.state}'
+    
+class Activitylogs(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    slug = models.CharField(max_length=100)
+    log = models.TextField()
+    device = models.CharField(max_length=100)
+    ip_address = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

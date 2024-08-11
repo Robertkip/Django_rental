@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination, Department
-from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer, DepartmentSerializer
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination, Department, Country, Activitylogs
+from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer, DepartmentSerializer, CountrySerializer, ActivitylogsSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from .permissions import IsAdmin, IsOrganizer, IsAttendee, IsAdminOrOrganizer, IsOwnerOnly
 
@@ -113,8 +113,10 @@ def user_detail(request, pk):
 def venue_list(request):
     if request.method == 'GET':
         venues = Venue.objects.all()
-        serializer = VenueSerializer(venues, many=True)
-        return Response(serializer.data)
+        paginator = LargeResultsSetPagination()
+        paginated_venues = paginator.paginate_queryset(venues, request)
+        serializer = VenueSerializer(paginated_venues, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     elif request.method == 'POST':
         serializer = VenueSerializer(data=request.data)
@@ -548,5 +550,84 @@ def department_detail(request, pk):
 
     elif request.method == 'DELETE':
         department.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#country
+
+@api_view(['GET', 'POST'])
+def country_list(request):
+    if request.method == 'GET':
+        countries = Country.objects.all()
+        serializer = CountrySerializer(countries, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = CountrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def country_detail(request, pk):
+    try:
+        country = Country.objects.get(pk=pk)
+    except Country.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CountrySerializer(country)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = CountrySerializer(country, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        country.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#ActiveLogs
+@api_view(['GET', 'POST'])
+def activitylogs_list(request):
+    if request.method == 'GET':
+        activelogs = Activitylogs.objects.all()
+        serializer = ActivitylogsSerializer(activelogs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = Activitylogs(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def activitylogs_detail(request, pk):
+    try:
+        activitylog = Activitylogs.objects.get(pk=pk)
+    except Activitylogs.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ActivitylogsSerializer(activitylog)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ActivitylogsSerializer(activitylog, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        activitylog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

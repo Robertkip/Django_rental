@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department, Country, Activitylogs
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,10 +9,22 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User(**validated_data)
-        user.set_password(validated_data['password'])  # Hash the password
-        user.save()
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
         return user
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Username already exists")
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already exists")
+        return value
     
 
 class VenueSerializer(serializers.ModelSerializer):
@@ -76,4 +88,15 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = ['id', 'name', 'description', 'created_at', 'updated_at']
-        
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'state', 'created_at', 'updated_at']
+
+
+class ActivitylogsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activitylogs
+        fields = ['id', 'user_id', 'action', 'timestamp', 'created_at', 'updated_at']
