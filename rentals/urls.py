@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import register_user, user_login, user_logout, user_list, user_detail, venue_list, venue_detail, event_list, event_detail, ticket_list, ticket_detail, transaction_list, transaction_detail, accesscontrol_list, accesscontrol_detail, eventfeedback_list, eventfeedback_detail, report_list, report_detail, discount_list, discount_detail, eventorganizer_list, eventorganizer_detail
+from .views import user_logout, user_list, user_detail, venue_list, venue_detail, event_list, event_detail, ticket_list, ticket_detail, transaction_list, transaction_detail, accesscontrol_list, accesscontrol_detail, eventfeedback_list, eventfeedback_detail, report_list, report_detail, discount_list, discount_detail, eventorganizer_list, eventorganizer_detail
 
 urlpatterns = [
-    path('register/', register_user, name='register'),
-    path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('users/', user_list, name="user_list"),
     path('users/<int:pk>/', user_detail, name="user_detail"),

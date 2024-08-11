@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 2  # Set the default page size
     page_size_query_param = 'page_size'  # Allow clients to set page size
-    max_page_size = 10  # Set maximum page size
+    max_page_size = 100  # Set maximum page size
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -23,7 +23,13 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
         return self.create_user(email, password, **extra_fields)
+
 #User model
 class User(AbstractBaseUser, PermissionsMixin):
     role_choices = (
@@ -112,7 +118,7 @@ class Transaction(models.Model):
     
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    ticket_id = models.ForeignKey('Ticket', on_delete=models.CASCADE)  # Ensure 'Ticket' is imported or defined
+    ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)# Ensure 'Ticket' is imported or defined
     transaction_date = models.DateTimeField()
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)

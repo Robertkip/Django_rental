@@ -1,6 +1,6 @@
 # rentals/views.py
 from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from django.contrib.auth import login, logout
 from rest_framework.decorators import api_view, permission_classes
@@ -10,7 +10,7 @@ from rest_framework import status
 from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination
 from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer
 from django.core.exceptions import ObjectDoesNotExist
-
+from .permissions import IsAdmin, IsOrganizer, IsAttendee, IsAdminOrOrganizer, IsOwnerOnly
 
 
 @api_view(['POST'])
@@ -58,7 +58,9 @@ def user_logout(request):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdmin])
 def user_list(request):
+
     if request.method == 'GET':
         users = User.objects.all()
         paginator = LargeResultsSetPagination()
@@ -82,6 +84,7 @@ def user_list(request):
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsOwnerOnly])
 def user_detail(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -106,6 +109,7 @@ def user_detail(request, pk):
 
 #Venue
 @api_view(['GET', 'POST'])
+@permission_classes([IsOwnerOnly])
 def venue_list(request):
     if request.method == 'GET':
         venues = Venue.objects.all()
@@ -120,6 +124,7 @@ def venue_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+# @permission_classes([IsOwnerOnly])
 def venue_detail(request, pk):
     try:
         venue = Venue.objects.get(pk=pk)
@@ -144,6 +149,7 @@ def venue_detail(request, pk):
 
 # Event Views
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdminOrOrganizer])
 def event_list(request):
     if request.method == 'GET':
         events = Event.objects.all()
@@ -159,6 +165,7 @@ def event_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def event_detail(request, pk):
     try:
         event = Event.objects.get(pk=pk)
@@ -183,6 +190,7 @@ def event_detail(request, pk):
 
 #Ticket views
 @api_view(['GET', 'POST'])
+# @permission_classes([IsAdminOrOrganizer])
 def ticket_list(request):
     if request.method == 'GET':
         tickets = Ticket.objects.all()
@@ -198,6 +206,7 @@ def ticket_list(request):
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAdminOrOrganizer])
 def ticket_detail(request, pk):
     try:
         ticket = Ticket.objects.get(pk=pk)
@@ -222,6 +231,7 @@ def ticket_detail(request, pk):
 
 #Transaction view
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdmin])
 def transaction_list(request):
     if request.method == 'GET':
         transactions = Transaction.objects.all()
@@ -261,6 +271,7 @@ def transaction_detail(request, pk):
 
 #AccessControl View
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdminOrOrganizer])
 def accesscontrol_list(request):
     if request.method == 'GET':
         accesscontrols = AccessControl.objects.all()
