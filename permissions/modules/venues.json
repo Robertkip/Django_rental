@@ -1,0 +1,16 @@
+{
+    "main": "venues",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_venues": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_venues": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}

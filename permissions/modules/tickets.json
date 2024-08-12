@@ -1,0 +1,16 @@
+{
+    "main": "tickets",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_tickets": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_tickets": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}

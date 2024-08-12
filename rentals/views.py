@@ -710,12 +710,10 @@ request):
         # Return the list of JSON filenames without the extension in the response
         return Response({"modules": json_files})
     
-
-
 def extract_permissions(children_dict, parent_key=""):
-    permissions = []
+    permissions = [parent_key] if parent_key else []
     for key, value in children_dict.items():
-        current_key = f"{parent_key}.{key}" if parent_key else key
+        current_key = f"{parent_key}.{value['main']}" if parent_key else value['main']
         permissions.append(current_key)
         if "children" in value:
             permissions.extend(extract_permissions(value["children"], current_key))
@@ -738,7 +736,7 @@ def single_json(request, module):
             
             # Extract the permissions
             children = json_content.get('children', {})
-            permissions = extract_permissions(children)
+            permissions = extract_permissions(children, json_content.get('main', module))
             
             # Prepare the response
             response = {
