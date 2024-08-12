@@ -69,12 +69,16 @@ def user_list(request):
         return paginator.get_paginated_response(serializer.data)
 
     # Handle POST request (if needed)
-    elif request.method == 'POST':
+
+@api_view(['POST'])
+def user_create(request):
+    if request.method == 'POST':
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     # elif request.method == 'POST':
         # serializer = UserSerializer(data=request.data)
@@ -109,7 +113,7 @@ def user_detail(request, pk):
 
 #Venue
 @api_view(['GET', 'POST'])
-@permission_classes([IsOwnerOnly])
+# @permission_classes([IsOwnerOnly])
 def venue_list(request):
     if request.method == 'GET':
         venues = Venue.objects.all()
@@ -118,12 +122,15 @@ def venue_list(request):
         serializer = VenueSerializer(paginated_venues, many=True)
         return paginator.get_paginated_response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def venue_create(request):
+    if request.method == 'POST':
         serializer = VenueSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 # @permission_classes([IsOwnerOnly])
@@ -151,14 +158,24 @@ def venue_detail(request, pk):
 
 # Event Views
 @api_view(['GET', 'POST'])
-@permission_classes([IsAdminOrOrganizer])
+# @permission_classes([IsAdminOrOrganizer])
 def event_list(request):
     if request.method == 'GET':
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            events = Event.objects.all()
+            serializer = EventSerializer(events, many=True)
+            return Response(serializer.data)
+
         events = Event.objects.all()
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
+        paginator = LargeResultsSetPagination()
+        paginated_events = paginator.paginate_queryset(events, request)
+        serializer = EventSerializer(paginated_events, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
-    elif request.method == 'POST':
+@api_view(['POST'])
+def event_create(request):
+    if request.method == 'POST':
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -195,11 +212,22 @@ def event_detail(request, pk):
 # @permission_classes([IsAdminOrOrganizer])
 def ticket_list(request):
     if request.method == 'GET':
-        tickets = Ticket.objects.all()
-        serializer = TicketSerializer(tickets, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            tickets = Ticket.objects.all()
+            serializer = TicketSerializer(tickets, many=True)
+            return Response(serializer.data)
+        else:
+            # Return paginated tickets
+            tickets = Ticket.objects.all()
+            paginator = LargeResultsSetPagination()
+            paginated_tickets = paginator.paginate_queryset(tickets, request)
+            serializer = TicketSerializer(paginated_tickets, many=True)
+            return paginator.get_paginated_response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def ticket_create(request):
+    if request.method == 'POST':
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -232,15 +260,27 @@ def ticket_detail(request, pk):
     
 
 #Transaction view
-@api_view(['GET', 'POST'])
-@permission_classes([IsAdmin])
+@api_view(['GET'])
+# @permission_classes([IsAdmin])
 def transaction_list(request):
     if request.method == 'GET':
-        transactions = Transaction.objects.all()
-        serializer = TransactionSerializer(transactions, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            transactions = Transaction.objects.all()
+            serializer = TransactionSerializer(transactions, many=True)
+            return Response(serializer.data)
+        else:
+            # Return paginated transactions
+            transactions = Transaction.objects.all()
+            paginator = LargeResultsSetPagination()
+            paginated_transactions = paginator.paginate_queryset(transactions, request)
+            serializer = TransactionSerializer(paginated_transactions, many=True)
+            return paginator.get_paginated_response(serializer.data)
 
-    elif request.method == 'POST':
+
+@api_view(['POST'])
+def transaction_create(request):
+    if request.method == 'POST':
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -276,9 +316,15 @@ def transaction_detail(request, pk):
 @permission_classes([IsAdminOrOrganizer])
 def accesscontrol_list(request):
     if request.method == 'GET':
-        accesscontrols = AccessControl.objects.all()
-        serializer = AccessControlSerializer(accesscontrols, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            accesscontrols = AccessControl.objects.all()
+            serializer = AccessControlSerializer(accesscontrols, many=True)
+            return Response(serializer.data)
+        else:
+            accesscontrols = AccessControl.objects.all()
+            serializer = AccessControlSerializer(accesscontrols, many=True)
+            return Response(serializer.data)
 
     elif request.method == 'POST':
         serializer = AccessControlSerializer(data=request.data)
@@ -315,9 +361,15 @@ def accesscontrol_detail(request, pk):
 @api_view(['GET', 'POST'])
 def eventfeedback_list(request):
     if request.method == 'GET':
-        eventfeedbacks = EventFeedback.objects.all()
-        serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            eventfeedbacks = EventFeedback.objects.all()
+            serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
+            return Response(serializer.data)
+        else:
+            eventfeedbacks = EventFeedback.objects.all()
+            serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
+            return Response(serializer.data)
 
     elif request.method == 'POST':
         serializer = EventFeedbackSerializer(data=request.data)
@@ -354,9 +406,15 @@ def eventfeedback_detail(request, pk):
 @api_view(['GET', 'POST'])
 def notification_list(request):
     if request.method == 'GET':
-        notifications = Notification.objects.all()
-        serializer = NotificationSerializer(notifications, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            notifications = Notification.objects.all()
+            serializer = NotificationSerializer(notifications, many=True)
+            return Response(serializer.data)
+        else:
+            notifications = Notification.objects.all()
+            serializer = NotificationSerializer(notifications, many=True)
+            return Response(serializer.data)
 
     elif request.method == 'POST':
         serializer = NotificationSerializer(data=request.data)
@@ -393,9 +451,15 @@ def notification_detail(request, pk):
 @api_view(['GET', 'POST'])
 def report_list(request):
     if request.method == 'GET':
-        reports = Report.objects.all()
-        serializer = ReportSerializer(reports, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            reports = Report.objects.all()
+            serializer = ReportSerializer(reports, many=True)
+            return Response(serializer.data)
+        else:
+            reports = Report.objects.all()
+            serializer = ReportSerializer(reports, many=True)
+            return Response(serializer.data)
 
     elif request.method == 'POST':
         serializer = ReportSerializer(data=request.data)
@@ -593,22 +657,22 @@ def country_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
-#ActiveLogs
+#Activitylogs
 @api_view(['GET', 'POST'])
 def activitylogs_list(request):
     if request.method == 'GET':
-        activelogs = Activitylogs.objects.all()
-        serializer = ActivitylogsSerializer(activelogs, many=True)
+        activitylog = Activitylogs.objects.all()
+        serializer = ActivitylogsSerializer(activitylog, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = Activitylogs(data=request.data)
+        serializer = ActivitylogsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
+# View to handle GET, PUT, and DELETE requests for individual activity logs
 @api_view(['GET', 'PUT', 'DELETE'])
 def activitylogs_detail(request, pk):
     try:
@@ -630,4 +694,3 @@ def activitylogs_detail(request, pk):
     elif request.method == 'DELETE':
         activitylog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    

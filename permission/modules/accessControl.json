@@ -1,7 +1,7 @@
 {
-    "main": "budgets",
+    "main": "accessControl",
     "roles": [
-        "member"
+        "Admin", "Organizer"
     ],
     "children": {
         "add_budget": {

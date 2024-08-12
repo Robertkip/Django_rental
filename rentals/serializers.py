@@ -9,28 +9,16 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])  # Hash the password
+        user.save()
         return user
-
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Username already exists")
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email already exists")
-        return value
     
 
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venue
-        fields = ['id', 'name', 'location', 'capacity', 'facilities', 'charge_rate', 'contact_info', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'location', 'capacity', 'facilities', 'charge_rate', 'created_at', 'updated_at']
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -99,4 +87,4 @@ class CountrySerializer(serializers.ModelSerializer):
 class ActivitylogsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Activitylogs
-        fields = ['id', 'user_id', 'action', 'timestamp', 'created_at', 'updated_at']
+        fields = ['id', 'user_id', 'state', 'log', 'created_at', 'updated_at']
