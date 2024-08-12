@@ -1,0 +1,16 @@
+{
+    "main": "departments",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_departments": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_departments": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "main": "eventfeedback",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_eventfeedback": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_eventfeedback": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}
