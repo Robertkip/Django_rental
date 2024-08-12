@@ -208,7 +208,7 @@ def event_detail(request, pk):
 
 
 #Ticket views
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 # @permission_classes([IsAdminOrOrganizer])
 def ticket_list(request):
     if request.method == 'GET':
@@ -312,7 +312,7 @@ def transaction_detail(request, pk):
     
 
 #AccessControl View
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @permission_classes([IsAdminOrOrganizer])
 def accesscontrol_list(request):
     if request.method == 'GET':
@@ -325,8 +325,10 @@ def accesscontrol_list(request):
             accesscontrols = AccessControl.objects.all()
             serializer = AccessControlSerializer(accesscontrols, many=True)
             return Response(serializer.data)
-
-    elif request.method == 'POST':
+        
+@api_view(['POST'])
+def accesscontrol_create(request):
+    if request.method == 'POST':
         serializer = AccessControlSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -371,7 +373,9 @@ def eventfeedback_list(request):
             serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
             return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def eventfeedback_create(request):
+    if request.method == 'POST':
         serializer = EventFeedbackSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -403,7 +407,7 @@ def eventfeedback_detail(request, pk):
     
 
 #Notification
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def notification_list(request):
     if request.method == 'GET':
         if 'all' in request.query_params and request.query_params['all'] == '1':
@@ -416,7 +420,9 @@ def notification_list(request):
             serializer = NotificationSerializer(notifications, many=True)
             return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def notification_create(request):
+    if request.method == 'POST':
         serializer = NotificationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -448,7 +454,7 @@ def notification_detail(request, pk):
     
 
 #Report
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def report_list(request):
     if request.method == 'GET':
         if 'all' in request.query_params and request.query_params['all'] == '1':
@@ -461,7 +467,9 @@ def report_list(request):
             serializer = ReportSerializer(reports, many=True)
             return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def report_create(request):
+    if request.method == 'POST':
         serializer = ReportSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -493,14 +501,17 @@ def report_detail(request, pk):
 
 
 #Discount
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def discount_list(request):
     if request.method == 'GET':
         discounts = Discount.objects.all()
         serializer = DiscountSerializer(discounts, many=True)
         return Response(serializer.data)
+    
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def discount_create(request):
+    if request.method == 'POST':
         serializer = DiscountSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -532,14 +543,16 @@ def discount_detail(request, pk):
     
 
 #EventOrganizer
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def eventorganizer_list(request):
     if request.method == 'GET':
         eventorganizers = EventOrganizer.objects.all()
         serializer = EventOrganizerSerializer(eventorganizers, many=True)
         return Response(serializer.data)
-
-    elif request.method == 'POST':
+    
+@api_view(['POST'])
+def eventorganizer_create(request):
+    if request.method == 'POST':
         serializer = EventOrganizerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -580,14 +593,16 @@ def eventorganizer_detail(request, pk):
 
 
 #Departments
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def department_list(request):
     if request.method == 'GET':
         departments = Department.objects.all()
         serializer = DepartmentSerializer(departments, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def department_create(request):
+    if request.method == 'POST':
         serializer = DepartmentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -619,14 +634,16 @@ def department_detail(request, pk):
 
 #country
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def country_list(request):
     if request.method == 'GET':
         countries = Country.objects.all()
         serializer = CountrySerializer(countries, many=True)
         return Response(serializer.data)
-
-    elif request.method == 'POST':
+    
+@api_view(['POST'])
+def country_create(request):
+    if request.method == 'POST':
         serializer = CountrySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -658,14 +675,17 @@ def country_detail(request, pk):
     
 
 #Activitylogs
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def activitylogs_list(request):
     if request.method == 'GET':
         activitylog = Activitylogs.objects.all()
         serializer = ActivitylogsSerializer(activitylog, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+
+@api_view(['POST'])
+def activitylogs_create(request):
+    if request.method == 'POST':
         serializer = ActivitylogsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
