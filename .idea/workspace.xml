@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5ba0df6f-056b-4c4c-888d-9c3d1c96b43c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/accessControl.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/activityLogs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/country.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/department.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/discount.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/event.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/eventFeedback.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/eventOrganizer.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/notification.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/report.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/ticket.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/transaction.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/user.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/modules/venue.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rentals/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/rentals/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rentals/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rentals/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rentals/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rentals/views.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2kWg2A4TOsewA8QeHZqYfJV0KKb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PS-241.19072.10" />
+        <option value="bundled-php-predefined-ba97393d7c68-48a1a656d44e-com.jetbrains.php.sharedIndexes-PS-241.19072.10" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5ba0df6f-056b-4c4c-888d-9c3d1c96b43c" name="Changes" comment="" />
+      <created>1723404539608</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1723404539608</updated>
+      <workItem from="1723404542754" duration="16000" />
+      <workItem from="1723406200055" duration="610000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

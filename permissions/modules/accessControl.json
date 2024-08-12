@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "main": "accessControl",
     "roles": [
         "Admin", "Organizer"
@@ -34,6 +35,23 @@
         },
         "update_budget_entry": {
             "main": "entries/entry/update",
+=======
+    "main": "auth",
+    "roles": [
+        "member","Admin","Organizer"
+    ],
+    "children": {
+        "sign_up": {
+            "main": "signup",
+            "roles": ["member"]
+        },
+        "login": {
+            "main": "login",
+            "roles": ["member"]
+        },
+        "update_budget_field": {
+            "main": "logout",
+>>>>>>> 6a054e9567f67cca079451b112df8b23622b2106
             "roles": ["member"]
         }
     }

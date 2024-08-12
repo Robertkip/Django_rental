@@ -9,8 +9,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination, Department, Country, Activitylogs
-from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer, DepartmentSerializer, CountrySerializer, ActivitylogsSerializer
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, LargeResultsSetPagination, Department, Country, Activitylogs, Booking, DepartmentPermission
+from .serializers import UserSerializer, VenueSerializer, EventSerializer, TicketSerializer, TransactionSerializer, AccessControlSerializer, EventFeedbackSerializer, NotificationSerializer, ReportSerializer, DiscountSerializer, EventOrganizerSerializer, DepartmentSerializer, CountrySerializer, ActivitylogsSerializer, BookingSerializer, DepartmentPermissionSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from .permissions import IsAdmin, IsOrganizer, IsAttendee, IsAdminOrOrganizer, IsOwnerOnly
 
@@ -800,3 +800,97 @@ def single_json(request, module):
             return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+#Booking
+@api_view(['GET'])
+def booking_list(request):
+    if request.method == 'GET':
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            booking = Booking.objects.all()
+            serializer = BookingSerializer(booking, many=True)
+            return Response(serializer.data)
+        else:
+            booking = Booking.objects.all()
+            serializer = BookingSerializer(booking, many=True)
+            return Response(serializer.data)
+        
+@api_view(['POST'])
+def booking_create(request):
+    if request.method == 'POST':
+        serializer = BookingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def booking_detail(request, pk):
+    try:
+        booking = Booking.objects.get(pk=pk)
+    except Booking.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = BookingSerializer(booking)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = BookingSerializer(booking, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        booking.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#DepartmentPermission
+@api_view(['GET'])
+def department_permission_list(request):
+    if request.method == 'GET':
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            department_permission = DepartmentPermission.objects.all()
+            serializer = DepartmentPermissionSerializer(department_permission, many=True)
+            return Response(serializer.data)
+        else:
+            department_permission = DepartmentPermission.objects.all()
+            serializer = DepartmentPermissionSerializer(department_permission, many=True)
+            return Response(serializer.data)
+        
+
+@api_view(['POST'])
+def department_permission_create(request):
+    if request.method == 'POST':
+        serializer = DepartmentPermissionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def department_permission_detail(request, pk):
+    try:
+        department_permission = DepartmentPermission.objects.get(pk=pk)
+    except DepartmentPermission.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = DepartmentPermissionSerializer(department_permission)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = DepartmentPermissionSerializer(department_permission, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        department_permission.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        

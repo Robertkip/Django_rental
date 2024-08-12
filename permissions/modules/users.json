@@ -1,7 +1,19 @@
 {
     "main": "users",
     "roles": [
+<<<<<<< HEAD
         "Admin"
     ]
     
+=======
+        "member","Admin","Organizer"
+    ],
+    "children": {
+        "sign_up": {
+            "main": "signup",
+            "roles": ["member"]
+        }
+    }
+
+>>>>>>> 6a054e9567f67cca079451b112df8b23622b2106
 }
