@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import user_logout, user_list, user_detail, venue_list, venue_detail, venue_create, event_list, event_create, event_detail, ticket_create, ticket_list, ticket_detail, transaction_create, transaction_list, transaction_detail, accesscontrol_create, accesscontrol_list, accesscontrol_detail, eventfeedback_create, eventfeedback_list, eventfeedback_detail, report_create, report_list, report_detail, discount_create, discount_list, discount_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, department_create, department_list, department_detail, country_create, country_list, country_detail, activitylogs_create, activitylogs_list, activitylogs_detail
-
+from .views import user_logout, user_list,read_json, single_json, user_detail, venue_list, venue_detail, venue_create, event_list, event_create, event_detail, ticket_create, ticket_list, ticket_detail, transaction_create, transaction_list, transaction_detail, accesscontrol_create, accesscontrol_list, accesscontrol_detail, eventfeedback_create, eventfeedback_list, eventfeedback_detail, report_create, report_list, report_detail, discount_create, discount_list, discount_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, department_create, department_list, department_detail, country_create, country_list, country_detail, activitylogs_create, activitylogs_list, activitylogs_detail
 
 
 urlpatterns = [
@@ -43,4 +42,6 @@ urlpatterns = [
     path('activitylog/store', activitylogs_create, name='activitylogs-create'),
     path('activitylog/list', activitylogs_list, name='activitylogs-list'),
     path('activitylog/<int:pk>/', activitylogs_detail, name='activitylogs-detail'),
+    path('read_json', read_json, name='read_json'),
+    path('single_json/<str:module>', single_json, name='single_json')
 ]
