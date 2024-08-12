@@ -24,6 +24,7 @@ urlpatterns = [
     path('eventfeedback/store', eventfeedback_create, name='eventfeedback-create'),
     path('eventfeedback/list', eventfeedback_list, name='eventfeedback-list'),
     path('eventfeedback/<int:pk>/', eventfeedback_detail, name='eventfeedback-detail'),
+<<<<<<< HEAD
     path('report/store', report_create, name='report-create'),
     path('report/list', report_list, name='report-list'),
     path('report/<int:pk>/', report_detail, name='report-detail'),
@@ -49,6 +50,26 @@ urlpatterns = [
     path('department_permission/list', department_permission_list, name='department_permission-list'),
     path('department_permission/<int:pk>/', department_permission_detail, name='department_permission-detail'),
     
+=======
+    path('reports/store', report_create, name='report-create'),
+    path('reports/list', report_list, name='report-list'),
+    path('reports/<int:pk>/', report_detail, name='report-detail'),
+    path('discounts/store', discount_create, name='discount-create'),
+    path('discounts/list', discount_list, name='discount-list'),
+    path('discounts/<int:pk>/', discount_detail, name='discount-detail'),
+
+    path('eventorganizers/store', eventorganizer_list, name='eventorganizer-list'),
+    path('eventorganizers/list/<int:pk>/', eventorganizer_detail, name='eventorganizer-detail'),
+    path('departments/store', department_create, name='department-create'),
+    path('departments/list', department_list, name='department-list'),
+    path('departments/<int:pk>/', department_detail, name='department-detail'),
+    path('countries/store', country_create, name='country-create'),
+    path('countries/list', country_list, name='country-list'),
+    path('countries/<int:pk>/', country_detail, name='country-detail'),
+    path('activitylogs/store', activitylogs_create, name='activitylogs-create'),
+    path('activitylogs/list', activitylogs_list, name='activitylogs-list'),
+    path('activitylogs/<int:pk>/', activitylogs_detail, name='activitylogs-detail'),
+>>>>>>> c8f831b59b29b4fed9fb1aca4abbc86f11d16e9c
     path('read_json', read_json, name='read_json'),
     path('single_json/<str:module>', single_json, name='single_json')
 ]
