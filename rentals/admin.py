@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department, Country, Activitylogs
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department, Country, Activitylogs, Booking, DepartmentPermission
 # Register your models here.
 
 admin.site.register(User)
@@ -16,3 +16,5 @@ admin.site.register(EventOrganizer)
 admin.site.register(Department)
 admin.site.register(Country)
 admin.site.register(Activitylogs)
+admin.site.register(Booking)
+admin.site.register(DepartmentPermission)

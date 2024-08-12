@@ -96,6 +96,7 @@ class Event(models.Model):
 #Ticket model   
 class Ticket(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     state = models.CharField(max_length=100, null=True, blank=True)
     ticket_type = models.CharField(max_length=100)
@@ -125,6 +126,7 @@ class Transaction(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)# Ensure 'Ticket' is imported or defined
     transaction_date = models.DateTimeField()
+    reference_id = models.CharField(max_length=100)
     state = models.CharField(max_length=100, null=True, blank=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -287,3 +289,35 @@ class Activitylogs(models.Model):
     ip_address = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self) -> str:
+        return f'{self.user_id.name} - {self.slug} - {self.log} - {self.device} - {self.ip_address} - {self.created_at} - {self.updated_at}'
+
+
+class Booking(models.Model):
+    id = models.AutoField(primary_key=True)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f'{self.event_id.name} - {self.ticket_id.name} - {self.user_id.name} - {self.name} - {self.email} - {self.phone} - {self.paid_amount} - {self.remaining_amount} - {self.state} - {self.created_at} - {self.updated_at}'
+    
+
+class DepartmentPermission(models.Model):
+    id = models.AutoField(primary_key=True)
+    permissions = models.CharField(max_length=255)
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='permissions')
+    module = models.CharField(max_length=255)
+    urls = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.department_id} - {self.module} - {self.permissions} - {self.urls} - {self.created_at} - {self.updated_at}'
