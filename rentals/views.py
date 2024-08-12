@@ -506,10 +506,16 @@ def report_detail(request, pk):
 @api_view(['GET'])
 def discount_list(request):
     if request.method == 'GET':
-        discounts = Discount.objects.all()
-        serializer = DiscountSerializer(discounts, many=True)
-        return Response(serializer.data)
-    
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            discounts = Discount.objects.all()
+            serializer = DiscountSerializer(discounts, many=True)
+            return Response(serializer.data)
+        else:
+            discounts = Discount.objects.all()
+            serializer = DiscountSerializer(discounts, many=True)
+            return Response(serializer.data)
+
 
 @api_view(['POST'])
 def discount_create(request):
@@ -548,9 +554,15 @@ def discount_detail(request, pk):
 @api_view(['GET'])
 def eventorganizer_list(request):
     if request.method == 'GET':
-        eventorganizers = EventOrganizer.objects.all()
-        serializer = EventOrganizerSerializer(eventorganizers, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            eventorganizers = EventOrganizer.objects.all()
+            serializer = EventOrganizerSerializer(eventorganizers, many=True)
+            return Response(serializer.data)
+        else:
+            eventorganizers = EventOrganizer.objects.all()
+            serializer = EventOrganizerSerializer(eventorganizers, many=True)
+            return Response(serializer.data)
     
 @api_view(['POST'])
 def eventorganizer_create(request):
@@ -598,9 +610,15 @@ def eventorganizer_detail(request, pk):
 @api_view(['GET'])
 def department_list(request):
     if request.method == 'GET':
-        departments = Department.objects.all()
-        serializer = DepartmentSerializer(departments, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            departments = Department.objects.all()
+            serializer = DepartmentSerializer(departments, many=True)
+            return Response(serializer.data)
+        else:
+            departments = Department.objects.all()
+            serializer = DepartmentSerializer(departments, many=True)
+            return Response(serializer.data)
 
 @api_view(['POST'])
 def department_create(request):
@@ -639,9 +657,15 @@ def department_detail(request, pk):
 @api_view(['GET'])
 def country_list(request):
     if request.method == 'GET':
-        countries = Country.objects.all()
-        serializer = CountrySerializer(countries, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            countries = Country.objects.all()
+            serializer = CountrySerializer(countries, many=True)
+            return Response(serializer.data)
+        else:
+            countries = Country.objects.all()
+            serializer = CountrySerializer(countries, many=True)
+            return Response(serializer.data)
     
 @api_view(['POST'])
 def country_create(request):
@@ -680,9 +704,15 @@ def country_detail(request, pk):
 @api_view(['GET'])
 def activitylogs_list(request):
     if request.method == 'GET':
-        activitylog = Activitylogs.objects.all()
-        serializer = ActivitylogsSerializer(activitylog, many=True)
-        return Response(serializer.data)
+        if 'all' in request.query_params and request.query_params['all'] == '1':
+            # Return all transactions as an array of objects without pagination
+            activitylog = Activitylogs.objects.all()
+            serializer = ActivitylogsSerializer(activitylog, many=True)
+            return Response(serializer.data)
+        else:
+            activitylog = Activitylogs.objects.all()
+            serializer = ActivitylogsSerializer(activitylog, many=True)
+            return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -730,10 +760,12 @@ request):
         # Return the list of JSON filenames without the extension in the response
         return Response({"modules": json_files})
     
+
+
 def extract_permissions(children_dict, parent_key=""):
-    permissions = [parent_key] if parent_key else []
+    permissions = []
     for key, value in children_dict.items():
-        current_key = f"{parent_key}.{value['main']}" if parent_key else value['main']
+        current_key = f"{parent_key}.{key}" if parent_key else key
         permissions.append(current_key)
         if "children" in value:
             permissions.extend(extract_permissions(value["children"], current_key))
@@ -756,7 +788,7 @@ def single_json(request, module):
             
             # Extract the permissions
             children = json_content.get('children', {})
-            permissions = extract_permissions(children, json_content.get('main', module))
+            permissions = extract_permissions(children)
             
             # Prepare the response
             response = {
