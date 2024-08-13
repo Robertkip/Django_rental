@@ -20,5 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('authentication.urls')),
     path('api/', include('rentals.urls')),
+    path('api/', include('rentals.department_urls')),
+    path('api/', include('rentals.booking_urls')),
+    path('api/', include('rentals.report_urls')),
     path('api/', include('rentals.urls_permisions')),
 ]
