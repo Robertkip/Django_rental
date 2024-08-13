@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_logout, user_list, read_json, single_json, user_detail, venue_list, venue_detail, venue_create, ticket_create, ticket_list, ticket_detail, transaction_create, transaction_list, transaction_detail, eventfeedback_create, eventfeedback_list, eventfeedback_detail, discount_create, discount_list, discount_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
+from .views import user_logout, user_list, read_json, single_json, user_detail, transaction_create, transaction_list, transaction_detail, eventfeedback_create, eventfeedback_list, eventfeedback_detail, discount_create, discount_list, discount_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
 
 urlpatterns = [
     path('logout/', user_logout, name='logout'),
