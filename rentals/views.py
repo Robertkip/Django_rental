@@ -113,154 +113,6 @@ def user_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#Venue
-@api_view(['GET', 'POST'])
-# @permission_classes([IsOwnerOnly])
-def venue_list(request):
-    if request.method == 'GET':
-        venues = Venue.objects.all()
-        paginator = LargeResultsSetPagination()
-        paginated_venues = paginator.paginate_queryset(venues, request)
-        serializer = VenueSerializer(paginated_venues, many=True)
-        return paginator.get_paginated_response(serializer.data)
-
-@api_view(['POST'])
-def venue_create(request):
-    if request.method == 'POST':
-        serializer = VenueSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-# @permission_classes([IsOwnerOnly])
-def venue_detail(request, pk):
-    try:
-        venue = Venue.objects.get(pk=pk)
-    except Venue.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = VenueSerializer(venue)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = VenueSerializer(venue, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        venue.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-
-# Event Views
-@api_view(['GET', 'POST'])
-# @permission_classes([IsAdminOrOrganizer])
-def event_list(request):
-    if request.method == 'GET':
-        if 'all' in request.query_params and request.query_params['all'] == '1':
-            # Return all transactions as an array of objects without pagination
-            events = Event.objects.all()
-            serializer = EventSerializer(events, many=True)
-            return Response(serializer.data)
-
-        events = Event.objects.all()
-        paginator = LargeResultsSetPagination()
-        paginated_events = paginator.paginate_queryset(events, request)
-        serializer = EventSerializer(paginated_events, many=True)
-        return paginator.get_paginated_response(serializer.data)
-    
-@api_view(['POST'])
-def event_create(request):
-    if request.method == 'POST':
-        serializer = EventSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
-def event_detail(request, pk):
-    try:
-        event = Event.objects.get(pk=pk)
-    except Event.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = EventSerializer(event, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        event.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-#Ticket views
-@api_view(['GET'])
-# @permission_classes([IsAdminOrOrganizer])
-def ticket_list(request):
-    if request.method == 'GET':
-        if 'all' in request.query_params and request.query_params['all'] == '1':
-            # Return all transactions as an array of objects without pagination
-            tickets = Ticket.objects.all()
-            serializer = TicketSerializer(tickets, many=True)
-            return Response(serializer.data)
-        else:
-            # Return paginated tickets
-            tickets = Ticket.objects.all()
-            paginator = LargeResultsSetPagination()
-            paginated_tickets = paginator.paginate_queryset(tickets, request)
-            serializer = TicketSerializer(paginated_tickets, many=True)
-            return paginator.get_paginated_response(serializer.data)
-
-@api_view(['POST'])
-def ticket_create(request):
-    if request.method == 'POST':
-        serializer = TicketSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAdminOrOrganizer])
-def ticket_detail(request, pk):
-    try:
-        ticket = Ticket.objects.get(pk=pk)
-    except Ticket.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = TicketSerializer(ticket)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = TicketSerializer(ticket, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        ticket.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-
 #Transaction view
 @api_view(['GET'])
 # @permission_classes([IsAdmin])
@@ -278,7 +130,6 @@ def transaction_list(request):
             paginated_transactions = paginator.paginate_queryset(transactions, request)
             serializer = TransactionSerializer(paginated_transactions, many=True)
             return paginator.get_paginated_response(serializer.data)
-
 
 @api_view(['POST'])
 def transaction_create(request):
@@ -359,7 +210,6 @@ def accesscontrol_detail(request, pk):
     elif request.method == 'DELETE':
         accesscontrol.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 #Eventfeedback
 @api_view(['GET', 'POST'])
@@ -407,52 +257,6 @@ def eventfeedback_detail(request, pk):
         eventfeedback.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-
-#Notification
-@api_view(['GET'])
-def notification_list(request):
-    if request.method == 'GET':
-        if 'all' in request.query_params and request.query_params['all'] == '1':
-            # Return all transactions as an array of objects without pagination
-            notifications = Notification.objects.all()
-            serializer = NotificationSerializer(notifications, many=True)
-            return Response(serializer.data)
-        else:
-            notifications = Notification.objects.all()
-            serializer = NotificationSerializer(notifications, many=True)
-            return Response(serializer.data)
-
-@api_view(['POST'])
-def notification_create(request):
-    if request.method == 'POST':
-        serializer = NotificationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def notification_detail(request, pk):
-    try:
-        notification = Notification.objects.get(pk=pk)
-    except Notification.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = NotificationSerializer(notification)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = NotificationSerializer(notification, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        notification.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 #Discount
 @api_view(['GET'])
@@ -557,104 +361,6 @@ def eventorganizer_detail(request, pk):
     # queryset = Billing.objects.all()
     # serializer_class = BillingRecordsSerializer
 #     pagination_class = LargeResultsSetPagination
-
-
-#Departments
-@api_view(['GET'])
-def department_list(request):
-    if request.method == 'GET':
-        if 'all' in request.query_params and request.query_params['all'] == '1':
-            # Return all transactions as an array of objects without pagination
-            departments = Department.objects.all()
-            serializer = DepartmentSerializer(departments, many=True)
-            return Response(serializer.data)
-        else:
-            departments = Department.objects.all()
-            serializer = DepartmentSerializer(departments, many=True)
-            return Response(serializer.data)
-
-@api_view(['POST'])
-def department_create(request):
-    if request.method == 'POST':
-        serializer = DepartmentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-@api_view(['GET', 'PUT', 'DELETE'])
-def department_detail(request, pk):
-    try:
-        department = Department.objects.get(pk=pk)
-    except Department.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = DepartmentSerializer(department)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = DepartmentSerializer(department, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        department.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-
-#country
-
-@api_view(['GET'])
-def country_list(request):
-    if request.method == 'GET':
-        if 'all' in request.query_params and request.query_params['all'] == '1':
-            # Return all countries as an array of objects without pagination
-            countries = Country.objects.all()
-            serializer = CountrySerializer(countries, many=True)
-            return Response(serializer.data)
-        else:
-            # Return paginated list of countries
-            countries = Country.objects.all()
-            paginator = LargeResultsSetPagination()
-            paginated_countries = paginator.paginate_queryset(countries, request)
-            serializer = CountrySerializer(paginated_countries, many=True)
-            return paginator.get_paginated_response(serializer.data)
-    
-@api_view(['POST'])
-def country_create(request):
-    if request.method == 'POST':
-        serializer = CountrySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def country_detail(request, pk):
-    try:
-        country = Country.objects.get(pk=pk)
-    except Country.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = CountrySerializer(country)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = CountrySerializer(country, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        country.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 #Activitylogs
 @api_view(['GET'])
