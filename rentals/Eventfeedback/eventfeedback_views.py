@@ -6,47 +6,36 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-
-from ..models import Ticket, LargeResultsSetPagination
-from ..serializers import TicketSerializer
-from ..permissions import IsAdminOrOrganizer
+from ..models import EventFeedback
+from ..serializers import EventFeedbackSerializer
 
 
-
-
-#Ticket views
-@api_view(['GET'])
-# @permission_classes([IsAdminOrOrganizer])
-def ticket_list(request):
+#Eventfeedback
+@api_view(['GET', 'POST'])
+def eventfeedback_list(request):
     if request.method == 'GET':
         if 'all' in request.query_params and request.query_params['all'] == '1':
             # Return all transactions as an array of objects without pagination
-            tickets = Ticket.objects.all()
-            serializer = TicketSerializer(tickets, many=True)
+            eventfeedbacks = EventFeedback.objects.all()
+            serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
             return Response(serializer.data)
         else:
-            # Return paginated tickets
-            tickets = Ticket.objects.all()
-            paginator = LargeResultsSetPagination()
-            paginated_tickets = paginator.paginate_queryset(tickets, request)
-            serializer = TicketSerializer(paginated_tickets, many=True)
-            return paginator.get_paginated_response(serializer.data)
-        
+            eventfeedbacks = EventFeedback.objects.all()
+            serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
+            return Response(serializer.data)
+
 @api_view(['GET'])
-def ticket_by_event(request, event_id):
+def eventfeedback_by_event(request, event_id):
     if request.method == 'GET':
-        tickets = Ticket.objects.filter(event_id=event_id)
-        # paginator = LargeResultsSetPagination()
-        # paginated_tickets = paginator.paginate_queryset(tickets, request)
-        serializer = TicketSerializer(tickets, many=True)
+        eventfeedbacks = EventFeedback.objects.filter(event_id=event_id)
+        serializer = EventFeedbackSerializer(eventfeedbacks, many=True)
         return Response(serializer.data)
-        # return paginator.get_paginated_response(serializer.data)
 
 
 @api_view(['POST'])
-def ticket_create(request):
+def eventfeedback_create(request):
     if request.method == 'POST':
-        serializer = TicketSerializer(data=request.data)
+        serializer = EventFeedbackSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -54,25 +43,24 @@ def ticket_create(request):
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAdminOrOrganizer])
-def ticket_detail(request, pk):
+def eventfeedback_detail(request, pk):
     try:
-        ticket = Ticket.objects.get(pk=pk)
-    except Ticket.DoesNotExist:
+        eventfeedback = EventFeedback.objects.get(pk=pk)
+    except EventFeedback.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = TicketSerializer(ticket)
+        serializer = EventFeedbackSerializer(eventfeedback)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = TicketSerializer(ticket, data=request.data)
+        serializer = EventFeedbackSerializer(eventfeedback, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        ticket.delete()
+        eventfeedback.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

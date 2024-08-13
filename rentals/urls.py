@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_logout, user_list, read_json, single_json, user_detail, transaction_create, transaction_list, transaction_detail, eventfeedback_create, eventfeedback_list, eventfeedback_detail, discount_create, discount_list, discount_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
+from .views import user_logout, user_list, read_json, single_json, user_detail, transaction_create, transaction_list, transaction_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
 
 urlpatterns = [
     path('logout/', user_logout, name='logout'),
@@ -8,12 +8,6 @@ urlpatterns = [
     path('transactions/store', transaction_create, name='transaction-create'),
     path('transactions/list', transaction_list, name='transaction-list'),
     path('transaction/<int:pk>/', transaction_detail, name='transaction-detail'),
-    path('eventfeedback/store', eventfeedback_create, name='eventfeedback-create'),
-    path('eventfeedback/list', eventfeedback_list, name='eventfeedback-list'),
-    path('eventfeedback/<int:pk>/', eventfeedback_detail, name='eventfeedback-detail'),
-    path('discount/store', discount_create, name='discount-create'),
-    path('discount/list', discount_list, name='discount-list'),
-    path('discount/<int:pk>/', discount_detail, name='discount-detail'),
     path('eventorganizer/store', eventorganizer_create, name='eventorganizer-create'),
     path('eventorganizer/list', eventorganizer_list, name='eventorganizer-list'),
     path('eventorganizer/<int:pk>/', eventorganizer_detail, name='eventorganizer-detail'),

@@ -28,6 +28,14 @@ def accesscontrol_list(request):
             serializer = AccessControlSerializer(accesscontrols, many=True)
             return Response(serializer.data)
         
+
+@api_view(['GET'])
+def accesscontrol_by_event(request, event_id):
+    if request.method == 'GET':
+        accesscontrols = AccessControl.objects.filter(event_id=event_id)
+        serializer = AccessControlSerializer(accesscontrols, many=True)
+        return Response(serializer.data)
+        
 @api_view(['POST'])
 def accesscontrol_create(request):
     if request.method == 'POST':

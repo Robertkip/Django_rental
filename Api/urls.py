@@ -22,6 +22,8 @@ urlpatterns = [
     path('api/', include('rentals.urls')),
     path('api/', include('rentals.Venue.venue_urls')),
     path('api/', include('rentals.Access.access_urls')),
+    path('api/', include('rentals.Discount.discount_urls')),
+    path('api/', include('rentals.Eventfeedback.eventfeedback_urls')),
     path('api/', include('rentals.Ticket.ticket_urls')),
     path('api/', include('rentals.Notification.notification_urls')),
     path('api/', include('rentals.Country.country_urls')),
