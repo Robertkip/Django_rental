@@ -1,0 +1,17 @@
+
+{
+    "main": "countries",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_countries": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_countries": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}

@@ -1,0 +1,17 @@
+
+{
+    "main": "activitylogs",
+    "roles": [
+        "Admin"
+    ],
+    "children": {
+        "store_activitylogs": {
+            "main": "store",
+            "roles": ["Admin"]
+        },
+        "list_activitylogs": {
+            "main": "list",
+            "roles": ["Admin"]
+        }
+    }
+}
