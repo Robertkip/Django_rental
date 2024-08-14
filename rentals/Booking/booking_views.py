@@ -10,16 +10,6 @@ from ..models import Booking, Event, Ticket
 from ..serializers import BookingSerializer, EventSerializer, TicketSerializer
 
 
-
-    
-
-
-
-
-
-
-
-
 #Booking
 @api_view(['GET'])
 def booking_list(request):
