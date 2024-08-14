@@ -8,6 +8,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
 
 @api_view(['GET'])
 def read_json(
@@ -62,3 +65,20 @@ def single_json(request, module):
             return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+@api_view(['POST'])
+def savePermisions(request, id, module):
+    # Extract the body of the request
+    request_body = request.data
+
+    # Prepare the response with the parameters from the URL and request body
+    response_data = {
+        'department_id': id,
+        'department_module': module,
+        'request_body': request_body
+    }
+
+    return Response(response_data, status=status.HTTP_200_OK)

@@ -33,4 +33,5 @@ urlpatterns = [
     path('api/', include('rentals.Report.report_urls')),
     path('api/', include('rentals.Event.event_urls')),
     path('api/', include('rentals.urls_permisions')),
+    path('api/', include('rentals.Read_Json.json_urls')),
 ]
