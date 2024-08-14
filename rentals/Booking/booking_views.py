@@ -10,21 +10,7 @@ from ..models import Booking, Event, Ticket
 from ..serializers import BookingSerializer, EventSerializer, TicketSerializer
 
 
-# Get booking by Event ID
-@api_view(['GET'])
-def booking_by_event(request, event_id):
-    if request.method == 'GET':
-        events = Event.objects.all()
-        ticket = Ticket.objects.all()
-        booking = Booking.objects.filter(event=event_id)
-        event_serializer = EventSerializer(events, many=True)
-        ticket_serializer = TicketSerializer(ticket, many=True)
-        booking_serializer = BookingSerializer(booking, many=True)
-        return Response({
-            'events': event_serializer.data,
-            'tickets': ticket_serializer.data,
-            'bookings': booking_serializer.data
-        })
+
     
 
 
@@ -47,6 +33,15 @@ def booking_list(request):
             booking = Booking.objects.all()
             serializer = BookingSerializer(booking, many=True)
             return Response(serializer.data)
+        
+
+# Get booking by Event ID
+@api_view(['GET'])
+def booking_by_event(request, event_id):
+    if request.method == 'GET':
+        booking = Booking.objects.filter(event_id=event_id)
+        serializer = BookingSerializer(booking, many=True)
+        return Response(serializer.data)
         
 @api_view(['POST'])
 def booking_create(request):
