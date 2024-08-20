@@ -18,13 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venue
-        fields = ['id', 'name', 'location', 'capacity', 'facilities', 'charge_rate', 'file', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'location', 'capacity', 'description', 'facilities', 'charge_rate', 'created_at', 'updated_at']
 
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'venue_id', 'organizer_id', 'file', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'venue_id', 'organizer_id', 'created_at', 'updated_at']
 
 
 class TicketSerializer(serializers.ModelSerializer):

@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from authentication.permission import BearerTokenAuthentication
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import authentication_classes, permission_classes
 from rentals.models import User
@@ -13,7 +14,7 @@ from rentals.models import User
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, username=request.data['username'])
-    print("uSER OBTAINED")
+    print("USER OBTAINED")
     if not user.check_password(request.data['password']):
         print("PASSWORD INCORRECT")
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -43,4 +44,6 @@ def signup(request):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
-    return Response("User is authenticated {}".format(request.user.email))
+    token, _ = Token.objects.get_or_create(user=request.user)
+    return Response("Successfully authenticated")
+    return Response({'token': f'Bearer {token.key}'})

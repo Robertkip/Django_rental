@@ -1,5 +1,11 @@
 from rest_framework import permissions
 
+from rest_framework.authentication import TokenAuthentication
+
+class BearerTokenAuthentication(TokenAuthentication):
+    keyword = 'Bearer'
+
+
 class IsAdmin(permissions.BasePermission):
     """
     Custom permission to allow access only to admin users.

@@ -13,7 +13,7 @@ from ..permissions import IsAdminOrOrganizer, IsOwnerOnly
 #Event
 # Event Views
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAdminOrOrganizer])
+#@permission_classes([IsAdminOrOrganizer])
 def event_list(request):
     if request.method == 'GET':
         if 'all' in request.query_params and request.query_params['all'] == '1':
