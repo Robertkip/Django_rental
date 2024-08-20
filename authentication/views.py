@@ -12,7 +12,7 @@ from rentals.models import User
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    user = get_object_or_404(User, email=request.data['email'])
     print("uSER OBTAINED")
     if not user.check_password(request.data['password']):
         print("PASSWORD INCORRECT")
@@ -43,4 +43,6 @@ def signup(request):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
-    return Response("User is authenticated {}".format(request.user.email))
+    user = request.user
+    serializer = UserSerializer(user)
+    return Response(serializer.data)

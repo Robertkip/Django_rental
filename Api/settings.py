@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-z^n$2f)lv=df_s0=%#_%zt5)v93_v)v4f^dhdd)x+%1w=3mzh$
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_HEADERS = '*'
+CORS_ALLOW_METHODS = '*'
 
 # Application definition
 
@@ -46,7 +49,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost:5175',
     'http://localhost:5173',
 ]
 
