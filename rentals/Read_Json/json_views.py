@@ -68,12 +68,12 @@ def single_json(request, module):
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from ..models import DepartmentPermission  # Import your model
 @api_view(['POST'])
 def savePermisions(request, id, module):
     # Extract the body of the request
     request_body = request.data
-
+    permissions_str = request.data.get('permission', '[]') 
     # Prepare the response with the parameters from the URL and request body
     response_data = {
         'department_id': id,
@@ -81,4 +81,14 @@ def savePermisions(request, id, module):
         'request_body': request_body
     }
 
+    department_permission = DepartmentPermission(
+            permissions=permissions_str,  # Store permissions as a string
+            department_id_id=id,
+            module=module,
+            urls='urls'
+        )
+        
+        # Save to the database
+    department_permission.save()
+    
     return Response(response_data, status=status.HTTP_200_OK)

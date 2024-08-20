@@ -93,7 +93,7 @@ class ActivitylogsSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id', 'user_id', 'event_id', 'ticket_id', 'created_at', 'updated_at']
+        fields = ['id', 'user_id', 'event_id', 'ticket_id', 'status', 'created_at', 'updated_at']
 
 
 class DepartmentPermissionSerializer(serializers.ModelSerializer):
