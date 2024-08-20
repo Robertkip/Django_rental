@@ -13,8 +13,8 @@ from rentals.models import User
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, username=request.data['username'])
-    print("USER OBTAINED")
+    user = get_object_or_404(User, email=request.data['email'])
+    print("uSER OBTAINED")
     if not user.check_password(request.data['password']):
         print("PASSWORD INCORRECT")
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -47,3 +47,4 @@ def test_token(request):
     token, _ = Token.objects.get_or_create(user=request.user)
     return Response("Successfully authenticated")
     return Response({'token': f'Bearer {token.key}'})
+
