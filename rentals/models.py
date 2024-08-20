@@ -9,6 +9,7 @@ class LargeResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'  # Allow clients to set page size
     max_page_size = 100  # Set maximum page size
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -29,6 +30,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self.create_user(email, password, **extra_fields)
+
 
 #User model
 class User(AbstractBaseUser, PermissionsMixin):
@@ -71,11 +73,12 @@ class Venue(models.Model):
     facilities = models.TextField(null=True, blank=True)
     charge_rate = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.CharField(max_length=100, null=True, blank=True)
+    file = models.FileField(upload_to='venues/files/', null=True, blank=True)  # Add file field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name}, {self.location}, {self.capacity}, {self.charge_rate}'
+        return f'{self.name}, {self.location}, {self.capacity}, {self.charge_rate}, {self.contact_name}, {self.file}'
     
 #Event model
 class Event(models.Model):
@@ -87,12 +90,14 @@ class Event(models.Model):
     end_date = models.DateField()
     venue_id = models.ForeignKey(Venue, on_delete=models.CASCADE)
     organizer_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='events/files/', null=True, blank=True)  # Add file field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name}, {self.description}, {self.start_date}, {self.end_date}'
-    
+        return f'{self.name}, {self.description}, {self.file}, {self.start_date}, {self.end_date}'
+
+
 #Ticket model   
 class Ticket(models.Model):
     id = models.AutoField(primary_key=True)
@@ -307,8 +312,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f'{self.event_id.name} - {self.ticket_id.name} - {self.user_id.name} - {self.name} - {self.email} - {self.phone} - {self.paid_amount} - {self.remaining_amount} - {self.state} - {self.created_at} - {self.updated_at}'
-    
+        return f'{self.event_id.name}, {self.ticket_id.name}, {self.user_id.name}, {self.name}, {self.email}, {self.phone}, {self.paid_amount}, {self.remaining_amount}, {self.state}, {self.created_at}, {self.updated_at}'
 
 class DepartmentPermission(models.Model):
     id = models.AutoField(primary_key=True)
@@ -320,4 +324,4 @@ class DepartmentPermission(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.department_id} - {self.module} - {self.permissions} - {self.urls} - {self.created_at} - {self.updated_at}'
+        return f'{self.department_id} - {self.department_module} - {self.permissions} - {self.urls} - {self.created_at} - {self.updated_at}'

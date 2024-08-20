@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z^n$2f)lv=df_s0=%#_%zt5)v93_v)v4f^dhdd)x+%1w=3mzh$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rentals',
     'authentication',
+    'corsheaders',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost:5173',
 ]
 
 AUTH_USER_MODEL = 'rentals.User'
@@ -49,6 +55,7 @@ AUTH_USER_MODEL = 'rentals.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

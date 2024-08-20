@@ -114,7 +114,7 @@ def user_detail(request, pk):
 
 #Transaction view
 @api_view(['GET'])
-# @permission_classes([IsAdmin])
+@permission_classes([IsAdmin])
 def transaction_list(request):
     if request.method == 'GET':
         if 'all' in request.query_params and request.query_params['all'] == '1':
