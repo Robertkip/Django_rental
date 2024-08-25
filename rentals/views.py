@@ -49,7 +49,7 @@ def user_login(request):
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def user_logout(request):
     if request.method == 'POST':
         try:
@@ -60,7 +60,7 @@ def user_logout(request):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 @api_view(['GET', 'POST'])
-@permission_classes([IsAdmin])
+# @permission_classes([IsAdmin])
 def user_list(request):
 
     if request.method == 'GET':

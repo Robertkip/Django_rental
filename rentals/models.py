@@ -3,6 +3,7 @@ from django.db.models import JSONField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from rest_framework.pagination import PageNumberPagination
+from datetime import datetime
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 2  # Set the default page size
@@ -64,6 +65,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 #Venue model
 class Venue(models.Model):
+    def upload_to(instance, filename):
+    # Use datetime to construct the file path
+        return f'tickven/{datetime.now().year}/{datetime.now().month}/{datetime.now().day}/{filename}'
+
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -74,7 +79,7 @@ class Venue(models.Model):
     facilities = models.TextField(null=True, blank=True)
     charge_rate = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.CharField(max_length=100, null=True, blank=True)
-    file = models.FileField(upload_to='venues/files/', null=True, blank=True)  # Add file field
+    file = models.FileField(upload_to=upload_to, null=True, blank=True)  # Add file field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -83,6 +88,10 @@ class Venue(models.Model):
     
 #Event model
 class Event(models.Model):
+    def upload_to(instance, filename):
+    # Use datetime to construct the file path
+        return f'tickven/{datetime.now().year}/{datetime.now().month}/{datetime.now().day}/{filename}'
+
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     state = models.CharField(max_length=100, null=True, blank=True)
@@ -91,7 +100,7 @@ class Event(models.Model):
     end_date = models.DateField()
     venue_id = models.ForeignKey(Venue, on_delete=models.CASCADE)
     organizer_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='events/files/', null=True, blank=True)  # Add file field
+    file = models.FileField(upload_to=upload_to, null=True, blank=True)  # Add file field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

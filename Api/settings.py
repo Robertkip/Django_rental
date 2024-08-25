@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'rentals',
     'authentication',
     'corsheaders',
+    'paypal.standard.ipn',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -68,10 +70,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Api.urls'
 
+
+#paypal credentials
+# paypalrestsdk = 'sb-428191918191@business.example.com'
+# PAYPAL_TEST = True
+
+PAYPAL_CLIENT_ID = 'ATVqy_gxh3jcW3IbIkJ57IrFa0CrckaryDRcCwbvJm4rFgS-EEmPK30_ZIOyew0hj0gnaK-1rnwGRJ9Z'
+PAYPAL_SECRET = 'EG9k4t2ERwrsh3YgaxZXYwMfzppgapDX7zjVgHM-2y-HwaH0gPeSXQzf0U3CMaTpUYDMmM1rDHjwNyPX'
+PAYPAL_MODE = 'sandbox'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,6 +146,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'tickven')
+MEDIA_URL = '/tickven/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -150,3 +163,7 @@ REST_FRAMEWORK = {
     'authentication.permission.BearerTokenAuthentication',
     ],
 }
+
+# PayPal Settings
+PAYPAL_RECEIVER_EMAIL = "silakosy@gmail.com"
+PAYPAL_TEST = True  # Use sandbox mode during testing
