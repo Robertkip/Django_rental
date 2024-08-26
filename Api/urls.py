@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/', include('rentals.urls_permisions')),
     path('api/', include('rentals.Read_Json.json_urls')),
     path('api/', include('rentals.paypal.paypal_urls')),
+    path('api/', include('rentals.Payment.payment_urls')),
 ]
 
 if settings.DEBUG:

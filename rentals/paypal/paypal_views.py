@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 import paypalrestsdk
@@ -41,7 +43,7 @@ def create_payment(request):
         return render(request, 'payment_failed.html')
     
 
-@csrf_protect
+@csrf_exempt
 
 def execute_payment(request):
     payment_id = request.GET.get('paymentId')

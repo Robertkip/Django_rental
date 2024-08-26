@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department, Country, Activitylogs, Booking
+from .models import User, Venue, Event, Ticket, Transaction, AccessControl, EventFeedback, Notification, Report, Discount, EventOrganizer, Department, Country, Activitylogs, Booking, Payment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -100,3 +100,8 @@ class DepartmentPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = ['id', 'permissions', 'module', 'urls', 'created_at', 'updated_at']
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'user_id', 'tickets', 'amount', 'status', 'created_at', 'updated_at']
