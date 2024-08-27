@@ -41,10 +41,10 @@ def signup(request):
 
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([SessionAuthentication, BearerTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     token, _ = Token.objects.get_or_create(user=request.user)
     return Response("Successfully authenticated")
-    return Response({'token': f'Bearer {token.key}'})
+    return Response({'token': f'Token {token.key}'})
 
