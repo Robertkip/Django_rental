@@ -61,10 +61,20 @@ def user_logout(request):
         
 @api_view(['GET', 'POST'])
 # @permission_classes([IsAdmin])
-def user_list(request):
+def listAdmin(request):
+    if request.method == 'GET':
+        users = User.objects.filter(role__iexact='Admin') 
+        paginator = LargeResultsSetPagination()
+        paginated_users = paginator.paginate_queryset(users, request)
+        serializer = UserSerializer(paginated_users, many=True)
+        return paginator.get_paginated_response(serializer.data)        
+    
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAdmin])
+def listUsers(request):
 
     if request.method == 'GET':
-        users = User.objects.all()
+        users = User.objects.exclude(role__iexact='admin') 
         paginator = LargeResultsSetPagination()
         paginated_users = paginator.paginate_queryset(users, request)
         serializer = UserSerializer(paginated_users, many=True)
