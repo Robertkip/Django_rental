@@ -13,7 +13,7 @@ from ..permissions import IsOwnerOnly
 
 
 #Venue
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @permission_classes([IsOwnerOnly])
 def venue_list(request):
     if request.method == 'GET':
@@ -57,4 +57,10 @@ def venue_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
-    
+#venues/list/all
+@api_view(['GET'])
+def venue_all(request):
+    if request.method =='GET':
+            venues = Venue.objects.all()
+            serializer = VenueSerializer(venues, many=True)
+            return Response(serializer.data)

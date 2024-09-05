@@ -12,7 +12,7 @@ from ..permissions import IsAdminOrOrganizer, IsOwnerOnly
 
 #Event
 # Event Views
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 #@permission_classes([IsAdminOrOrganizer])
 def event_list(request):
     if request.method == 'GET':
@@ -60,3 +60,11 @@ def event_detail(request, pk):
     elif request.method == 'DELETE':
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+#events/list/all
+@api_view(['GET'])
+def event_all(request):
+    if request.method =='GET':
+            events = Event.objects.all()
+            serializer = EventSerializer(events, many=True)
+            return Response(serializer.data)

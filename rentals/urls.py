@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import user_logout, user_list, user_detail, transaction_create, transaction_list, transaction_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
+from .views import user_logout, user_list, get_user_by_id, user_detail, transaction_create, transaction_list, transaction_detail, eventorganizer_create, eventorganizer_list, eventorganizer_detail, activitylogs_create, activitylogs_list, activitylogs_detail
 
 urlpatterns = [
     path('logout/', user_logout, name='logout'),
     path('users/', user_list, name="user_list"),
     path('users/<int:pk>/', user_detail, name="user_detail"),
+    path('users/get/any/<int:pk>/', get_user_by_id, name='get-user-by-id'),
     path('transactions/store', transaction_create, name='transaction-create'),
     path('transactions/list', transaction_list, name='transaction-list'),
     path('transaction/<int:pk>/', transaction_detail, name='transaction-detail'),

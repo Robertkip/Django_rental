@@ -111,6 +111,21 @@ def user_detail(request, pk):
     elif request.method == 'DELETE':
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+# /users/get/any/id
+@api_view(['GET'])
+def get_user_by_id(request, pk):
+    """
+    Retrieve a user by their ID.
+    """
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserSerializer(user)
+    return Response(serializer.data) 
 
 #Transaction view
 @api_view(['GET'])

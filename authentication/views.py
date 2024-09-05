@@ -13,18 +13,28 @@ from rentals.models import User
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, email=request.data['email'])
-    print("uSER OBTAINED")
-    if not user.check_password(request.data['password']):
-        print("PASSWORD INCORRECT")
-        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    # Ensure 'email' and 'password' are provided in the request
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    if not email or not password:
+        return Response({"detail": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user = get_object_or_404(User, email=email)
+    print("User obtained")
+
+    if not user.check_password(password):
+        print("Password incorrect")
+        return Response({"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
+
     print("Token generation")
     token, created = Token.objects.get_or_create(user=user)
     print("Token generated")
+
     serializer = UserSerializer(instance=user)
     print("Serializer data")
-    return Response({"token": token.key, "User": serializer.data})
 
+    return Response({"token": token.key, "user": serializer.data})
 
 @api_view(['POST'])
 def signup(request):
@@ -45,6 +55,11 @@ def signup(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     token, _ = Token.objects.get_or_create(user=request.user)
-    return Response("Successfully authenticated")
-    return Response({'token': f'Token {token.key}'})
+    user = request.user
+    user_data = {
+        "username": user.username,
+        'email': user.email,
+        "role": user.role
+    }
+    return Response(user_data)
 
