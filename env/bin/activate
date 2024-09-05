@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/freemano/Documents/Events_Booking/Django_rental/env"
+VIRTUAL_ENV="/var/www/html/Events_Booking/Django_rental/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

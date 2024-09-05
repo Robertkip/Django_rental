@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rentals',
     'authentication',
     'corsheaders',
-    'paypal.standard.ipn',
+    # 'paypal.standard.ipn',
 ]
 
 CORS_ALLOWED_ORIGINS = [
