@@ -22,6 +22,21 @@ def venue_list(request):
         paginated_venues = paginator.paginate_queryset(venues, request)
         serializer = VenueSerializer(paginated_venues, many=True)
         return paginator.get_paginated_response(serializer.data)
+    
+
+@api_view(['GET'])
+def venue_list_all(request):
+    """
+    List all venues. If the query parameter 'all=1' is passed, return all venues.
+    """
+    if request.query_params.get('all') == '1':
+        venues = Venue.objects.all()
+        serializer = VenueSerializer(venues, many=True)
+        return Response(serializer.data)
+
+    # Optional: Return an empty response or handle the case where 'all=1' is not provided.
+    return Response({"error": "Query parameter 'all=1' not provided"}, status=400)
+
 
 @api_view(['POST'])
 def venue_create(request):
