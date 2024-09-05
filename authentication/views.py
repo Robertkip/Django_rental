@@ -33,6 +33,7 @@ def login(request):
 
     serializer = UserSerializer(instance=user)
     print("Serializer data")
+    return Response({"token": token.key, "user": serializer.data})
 
     return Response({"token": token.key, "user": serializer.data})
 
@@ -63,3 +64,31 @@ def test_token(request):
     }
     return Response(user_data)
 
+    
+    # Base user data
+    user_data = {
+        "id": user.id,
+        "name": "Super Admin" if user.role == 'admin' else user.username,  # Name based on role
+        "email": user.email,
+        "email_verified_at": None,  # Assuming email verification is not implemented
+        "phone": None,  # Assuming no phone number is stored
+        "phone_verified_at": None,  # Assuming phone verification is not implemented
+        "role": user.role,
+        "department_id": 1,  # Assuming a default department_id
+        "care_taker_id": None,  # Assuming no caretaker associated
+        "permissions": None,  # Placeholder, will be set based on role
+        "menuCounts": {
+            "properties": 0,
+            "tenants": 0,
+            "caretakers": 0
+        }
+    }
+    
+    # Set permissions based on role
+    if user.role == 'admin':
+        user_data["permissions"] = '[\"admin\",\"admin.activity-logs\",\"admin.activity-logs.list\",\"admin.dashboard-stats\",\"config\",\"config.counties\",\"config.counties.store\",\"config.counties.list\",\"config.services\",\"config.services.store\",\"config.services.list\",\"config.units\",\"config.units.store\",\"config.units.list\",\"config.utilities\",\"config.utilities.store\",\"config.utilities.list\",\"config.amenities\",\"config.amenities.store\",\"config.amenities.list\",\"config.features\",\"config.features.store\",\"config.features.list\",\"config.tenant-contact-relationship\",\"config.tenant-contact-relationship.store\",\"config.tenant-contact-relationship.list\",\"config.tenant-asset-categories\",\"config.tenant-asset-categories.store\",\"config.tenant-asset-categories.list\",\"config.venues\",\"config.venues.list\",\"config.venues.store\",\"config.countries\",\"config.countries.list\",\"config.countries.store\",\"dashboard\",\"dashboard.stats\",\"events\",\"events.transactions\",\"events.transactions.list\",\"events.transactions.store\",\"events.event-feedbacks\",\"events.event-feedbacks.list\",\"events.event-feedbacks.store\",\"events.discounts\",\"events.discounts.list\",\"events.discounts.store\",\"events.bookings\",\"events.bookings.list\",\"events.bookings.store\",\"events.tickets\",\"events.tickets.list\",\"events.tickets.store\",\"events.list\",\"events.store\",\"logs\",\"logs.admin_activitylogs\",\"permissions\",\"permissions.departments\",\"permissions.departments.add_department\",\"permissions.departments.list_departments\",\"permissions.departments.delete_department\",\"permissions.departments.manage_permissions\",\"users\",\"users.add_user\",\"users.list_users\",\"users.get_any_user\",\"users.update_details\",\"users.reset_password\"]'
+    else:
+        user_data["permissions"] = '[\"config\",\"config.counties\",\"config.counties.list\",\"config.services\",\"config.services.store\",\"config.services.list\",\"config.units\",\"config.units.list\",\"config.utilities\",\"config.utilities.list\",\"config.amenities\",\"config.amenities.store\",\"config.amenities.list\",\"config.features\",\"config.features.list\",\"config.tenant-contact-relationship\",\"config.tenant-contact-relationship.list\",\"config.tenant-asset-categories\",\"config.tenant-asset-categories.list\",\"config.venues\",\"config.venues.list\",\"config.venues.store\",\"config.countries\",\"config.countries.list\",\"config.countries.store\",\"dashboard\",\"dashboard.stats\",\"events\",\"events.transactions\",\"events.transactions.list\",\"events.transactions.store\",\"events.event-feedbacks\",\"events.event-feedbacks.list\",\"events.event-feedbacks.store\",\"events.discounts\",\"events.discounts.list\",\"events.discounts.store\",\"events.bookings\",\"events.bookings.list\",\"events.bookings.store\",\"events.tickets\",\"events.tickets.list\",\"events.tickets.store\",\"events.list\",\"events.store\",\"users\",\"users.reset_password\"]'
+    
+    # Return the complete user data
+    return Response(user_data)
