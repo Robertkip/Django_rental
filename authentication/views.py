@@ -57,13 +57,6 @@ def signup(request):
 def test_token(request):
     token, _ = Token.objects.get_or_create(user=request.user)
     user = request.user
-    user_data = {
-        "username": user.username,
-        'email': user.email,
-        "role": user.role
-    }
-    return Response(user_data)
-
     
     # Base user data
     user_data = {
@@ -73,7 +66,7 @@ def test_token(request):
         "email_verified_at": None,  # Assuming email verification is not implemented
         "phone": None,  # Assuming no phone number is stored
         "phone_verified_at": None,  # Assuming phone verification is not implemented
-        "role": user.role,
+        "role":  user.role.lower(),
         "department_id": 1,  # Assuming a default department_id
         "care_taker_id": None,  # Assuming no caretaker associated
         "permissions": None,  # Placeholder, will be set based on role
